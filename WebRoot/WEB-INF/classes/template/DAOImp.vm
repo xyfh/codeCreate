@@ -1,0 +1,18 @@
+package  ${package};
+
+import org.springframework.stereotype.Repository;
+
+import ${implements_package}.${model}Dao;
+import ${model_path};
+
+/**
+ * 代码自动生成类
+ * @author lkp 
+ * mail 1253364701@qq.com
+ * create:${nowDate}
+ * update:
+ */
+@Repository
+public class ${model}DaoImpl extends BaseDaoImpl<${model}> implements ${model}Dao {
+	
+}

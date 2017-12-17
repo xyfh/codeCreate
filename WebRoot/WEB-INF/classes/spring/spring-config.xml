@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:task="http://www.springframework.org/schema/task"
+	xsi:schemaLocation="
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
+		http://www.springframework.org/schema/task  
+        http://www.springframework.org/schema/task/spring-task.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd">
+	
+	<context:component-scan base-package="com.lkp.*">
+		<!-- 防止重复扫描注解 -->
+		<!-- <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller" /> -->
+	</context:component-scan>
+	
+	<!-- 导入属性文件 -->
+	<context:property-placeholder location="classpath:jdbc.properties" />
+
+	<!-- 开启@AspectJ的aop自动代理 -->
+	<!-- <aop:aspectj-autoproxy proxy-target-class="true" /> -->
+
+	<!-- <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+		connection info
+		<property name="driverClassName" value="${jdbc.driver}" />
+		<property name="url" value="${jdbc.url}" />
+		<property name="username" value="${jdbc.username}" />
+		<property name="password" value="${jdbc.password}" />
+		
+		connection pooling info
+		<property name="initialSize" value="${dbcp.initialSize}" />
+		<property name="minIdle" value="${dbcp.minIdle}" />
+		<property name="maxIdle" value="${dbcp.maxIdle}" />
+		<property name="maxActive" value="${dbcp.maxActive}" />
+		<property name="maxWait" value="${dbcp.maxWait}" />
+		
+		事务是否自动提交
+		<property name="defaultAutoCommit" value="false" />
+		
+		对空闲连接的配置
+		每隔多久启动一次空闲连接回收器 单位:毫秒
+		<property name="timeBetweenEvictionRunsMillis" value="3600000" />
+		空闲连接回收器运行时检查的连接数量,推荐与maxIdle相等
+		<property name="numTestsPerEvictionRun" value="50" />
+		保持空闲而不被空闲连接回收器回收的最小时间值 单位:毫秒
+		<property name="minEvictableIdleTimeMillis" value="3600000" />
+		空闲连接回收器清理完连接后,检查有效连接数是否小于minIdle,如果小于,则自动创建新连接,保证最小的minIdle连接数
+		<property name="testWhileIdle" value="true" />
+		验证连接是否有效的SQL
+		<property name="validationQuery" value="select 1 from dual" />
+		是否在从池中取出连接前进行检验,如果检验失败,则从池中去除连接并尝试取出另一个
+		<property name="testOnBorrow" value="false" />
+		
+		对活动连接的配置
+		是否删除泄露的连接
+		<property name="removeAbandoned" value="true" />
+		泄露的连接空闲多久可以被删除, 单位:秒
+		<property name="removeAbandonedTimeout" value="300" />
+		当删除泄露的连接时,是否打印程序的stack traces日志
+		<property name="logAbandoned" value="false" />
+	</bean> -->
+	<!-- 数据源配置 -->
+	<bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource"
+		init-method="init" destroy-method="close">
+		<!-- 驱动名称 -->
+		<property name="DriverClassName" value="${jdbc.driver}" />
+		<!-- JDBC连接串 -->
+		<property name="url" value="${jdbc.url}" />
+		<!-- 数据库用户名称 -->
+		<property name="username" value="${jdbc.username}" />
+		<!-- 数据库密码 -->
+		<property name="password" value="${jdbc.password}" />
+		<!-- 连接池最大使用连接数量 -->
+		<property name="maxActive" value="20" />
+		<!-- 初始化大小 -->
+		<property name="initialSize" value="5" />
+		<!-- 获取连接最大等待时间 -->
+		<property name="maxWait" value="60000" />
+		<!-- 连接池最小空闲 -->
+		<property name="minIdle" value="2" />
+		<!-- 逐出连接的检测时间间隔 -->
+		<property name="timeBetweenEvictionRunsMillis" value="3000" />
+		<!-- 最小逐出时间 -->
+		<property name="minEvictableIdleTimeMillis" value="300000" />
+		<!-- 测试有效用的SQL Query -->
+		<property name="validationQuery" value="SELECT 'x'" />
+		<!-- 连接空闲时测试是否有效 -->
+		<property name="testWhileIdle" value="true" />
+		<!-- 获取连接时测试是否有效 -->
+		<property name="testOnBorrow" value="false" />
+		<!-- 归还连接时是否测试有效 -->
+		<property name="testOnReturn" value="false" />
+	</bean>
+	<bean id="sessionFactory"
+		class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+		<property name="dataSource" ref="dataSource"/>
+		<property name="hibernateProperties">
+			<props>
+				<prop key="hibernate.dialect">${hibernate.dialect}</prop>
+				<prop key="hibernate.show_sql">${hibernate.show_sql}</prop>
+				<prop key="hibernate.format_sql">${hibernate.format_sql}</prop>
+				<prop key="hibernate.use_sql_comments">true</prop>
+				<prop key="hibernate.jdbc.fetch_size">25</prop>
+				<prop key="hibernate.jdbc.batch_size">25</prop>
+				<prop key="hibernate.connection.release_mode">after_transaction</prop>
+				<prop key="hibernate.generate_statistics">true</prop>
+				<prop key="hibernate.cglib.use_reflection_optimizer">true</prop>
+				<prop key="hibernate.current_session_context_class">org.springframework.orm.hibernate4.SpringSessionContext</prop>
+				<prop key="hibernate.hbm2ddl.auto">${hibernate.hbm2ddl.auto}</prop>
+			</props>
+		</property>
+		<property name="packagesToScan" value="com.lkp.**.pojo"/>
+		<property name="mappingLocations">
+			<list>
+				<value>classpath:hibernate/*.hbm.xml</value>
+			</list>
+		</property>
+	</bean>
+	
+	<!-- 声明一个 Hibernate4 的事务管理器供代理类自动管理事务用 -->
+	<bean id="transactionManager" class="org.springframework.orm.hibernate4.HibernateTransactionManager">
+        <property name="sessionFactory" ref="sessionFactory"/>
+	</bean>
+	
+	<!-- 使用annotation定义事务 -->
+	<tx:annotation-driven transaction-manager="transactionManager"/>
+	
+	<!--事务模板,用于编程式事务管理 -->
+    <!-- <bean id="transactionTemplate"  
+        class="org.springframework.transaction.support.TransactionTemplate">  
+        <property name="transactionManager" ref="transactionManager"/>
+        <property name="isolationLevelName" value="ISOLATION_DEFAULT"/>  
+        <property name="propagationBehaviorName" value="PROPAGATION_REQUIRED"/>  
+    </bean> -->
+	
+</beans>

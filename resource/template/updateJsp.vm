@@ -1,0 +1,28 @@
+<%@ page language="java" pageEncoding="UTF-8"%>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+  	<%@include file="/pages/include/base-head.jsp"%>
+  	<%@include file="/pages/include/jquery-easyui.jsp"%>
+  </head>
+  <body>
+  	<form id="update-form" class="dialog-data-form">
+  		<input name="id" type="hidden" value="${param.id}" />
+    	<table cellspacing="4">
+    		<tbody>
+    		
+#foreach($column in $columns)
+					<tr>
+	    				<td class="field">$column.name</td>
+	    				<td>
+	    						#if($column.status=='')<input name="$column.field" type="$column.type" value="$column.value" class="field easyui-validatebox" #if($column.maxlength!='')maxlength="$column.maxlength"#end #if($column.required!='')data-options="required:$column.required"#end/>#else$column.status#end
+	    						
+	    				</td>
+	    			</tr>
+#end
+    		</tbody>
+    	</table>
+   	</form>
+   	
+  </body>
+</html>

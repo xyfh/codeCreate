@@ -1,0 +1,35 @@
+<%@ page language="java" pageEncoding="UTF-8"%>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+	<%@include file="/pages/include/base-head.jsp"%>
+	<%@include file="/pages/include/jquery-easyui.jsp"%>
+	<script type="text/javascript" src="${skin}/js/system/${model_lowercase}.js"></script>
+  </head>
+  <body>
+
+  	<div class="container">
+	    <table id="datagrid" data-options="
+   			url:'${contextPath}/${request}/${model_lowercase}/query', 
+   			toolbar:'#toolbar'">
+			<thead>
+				<tr>
+#foreach($column in $columns)
+					<th data-options="field:'$column.field'
+					#if($column.width!=''),width:$column.width#end
+					#if($column.formatter!=''),formatter:$column.formatter#end
+">$column.name</th>
+#end
+				</tr>
+			</thead>
+		</table>
+  	</div>
+  	
+  	<div id="toolbar" style="padding:2px;">
+		<i:function code="${request}.${model_lowercase}Query" href="javascript:void(0);" cssClass="easyui-linkbutton" dataOptions="iconCls:'icon-search',plain:true" text="查询" onclick="${request}.${model_lowercase}.query();"/>
+		<i:function code="${request}.${model_lowercase}Add" href="javascript:void(0);" cssClass="easyui-linkbutton" dataOptions="iconCls:'icon-add',plain:true" text="添加" onclick="${request}.${model_lowercase}.add();"/>
+		<i:function code="${request}.${model_lowercase}Update" href="javascript:void(0);" cssClass="easyui-linkbutton" dataOptions="iconCls:'icon-edit',plain:true,group:'single'" text="修改" onclick="${request}.${model_lowercase}.update();"/>
+		<i:function code="${request}.${model_lowercase}Delete" href="javascript:void(0);" cssClass="easyui-linkbutton" dataOptions="iconCls:'icon-remove',plain:true,group:'single'" text="删除" onclick="${request}.${model_lowercase}.remove();"/>
+	</div>
+  </body>
+</html>

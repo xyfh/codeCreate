@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project-module
+  type="WEB"
+  name="lkp_sh"
+  id="myeclipse.1508467595426"
+  context-root="/jdbcTest"
+  j2ee-spec="5.0"
+  archive="lkp_sh.war">
+  <attributes>
+    <attribute name="webrootdir" value="WebRoot" />
+  </attributes>
+</project-module>
+

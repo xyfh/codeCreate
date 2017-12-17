@@ -1,0 +1,20 @@
+package  ${package};
+
+import org.springframework.stereotype.Service;
+
+import ${implements_package}.${model}Service;
+import com.cloud.icenter.pojo.system.Logging;
+import ${model_path};
+
+/**
+ * 代码自动生成类
+ * @author lkp 
+ * mail 1253364701@qq.com
+ * create:${nowDate}
+ * update:
+ */
+@Logging
+@Service
+public class ${model}ServiceImpl extends BaseServiceImpl<${model}> implements ${model}Service {
+	
+}

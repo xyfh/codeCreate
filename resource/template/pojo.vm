@@ -1,0 +1,40 @@
+package  ${package};
+
+import java.util.Date;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+import javax.persistence.Transient;
+
+import org.hibernate.annotations.GenericGenerator;
+import org.springframework.format.annotation.DateTimeFormat;
+import com.lkp.pojo.Pojo;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.project.code.PageList;
+import com.project.code.AddInterface;
+/**
+ * 代码自动生成类
+ * @author lkp 
+ * mail 1253364701@qq.com
+ * create:${nowDate}
+ * update:
+ */
+@Entity
+@Table(name = "${tableName}")
+public class ${model} extends Pojo {
+	
+#foreach($column in $columns)
+	@PageList(name="$column.columnComment")@AddInterface(name="$column.columnComment")
+	@Column(name = "$column.columnName"#if($column.columnLength!=0), length = $column.columnLength#end)
+	private $column.dataType $column.javaName;
+	
+#end
+	
+	
+
+}
